@@ -35,7 +35,7 @@ func TestClusterDefaults(t *testing.T) {
 func TestStorageDefaults(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 `
@@ -51,7 +51,7 @@ metadata:
 func TestEtcdDefaults(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 spec:
@@ -70,7 +70,7 @@ spec:
 func TestNetworkValidation_Custom(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 spec:
@@ -89,7 +89,7 @@ spec:
 func TestNetworkValidation_Calico(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 spec:
@@ -108,7 +108,7 @@ spec:
 func TestNetworkValidation_Invalid(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 spec:
@@ -128,7 +128,7 @@ spec:
 func TestApiExternalAddress(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 spec:
@@ -146,7 +146,7 @@ spec:
 func TestApiNoExternalAddress(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 spec:
@@ -163,7 +163,7 @@ spec:
 func TestWorkerProfileConfig(t *testing.T) {
 	yamlData := `
 apiVersion: k0s.k0sproject.io/v1beta1
-kind: Cluster
+kind: ClusterConfig
 metadata:
   name: foobar
 spec:
