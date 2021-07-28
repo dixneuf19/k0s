@@ -33,7 +33,7 @@ import (
 
 	workercmd "github.com/k0sproject/k0s/cmd/worker"
 	"github.com/k0sproject/k0s/internal/util"
-	"github.com/k0sproject/k0s/pkg/apis/v1beta1"
+	"github.com/k0sproject/k0s/pkg/apis/k0s.k0sproject.io/v1beta1"
 	"github.com/k0sproject/k0s/pkg/applier"
 	"github.com/k0sproject/k0s/pkg/build"
 	"github.com/k0sproject/k0s/pkg/certificate"
@@ -545,7 +545,6 @@ func (c *CmdOpts) startControllerWorker(_ context.Context, profile string) error
 			// 225 seconds here
 			tokenAge := time.Second * 225
 			cfg, err := token.CreateKubeletBootstrapConfig(c.ClusterConfig, c.K0sVars, "worker", tokenAge)
-
 			if err != nil {
 				return err
 			}

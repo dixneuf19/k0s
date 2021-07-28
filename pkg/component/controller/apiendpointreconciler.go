@@ -24,8 +24,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	config "github.com/k0sproject/k0s/pkg/apis/v1beta1"
-	k0sv1beta1 "github.com/k0sproject/k0s/pkg/apis/v1beta1"
+	"github.com/k0sproject/k0s/pkg/apis/k0s.k0sproject.io/v1beta1"
+
 	k8sutil "github.com/k0sproject/k0s/pkg/kubernetes"
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
@@ -35,7 +35,7 @@ import (
 
 // APIEndpointReconciler is the component to reconcile in-cluster API address endpoint based from externalName
 type APIEndpointReconciler struct {
-	ClusterConfig *config.ClusterConfig
+	ClusterConfig *v1beta1.ClusterConfig
 
 	L *logrus.Entry
 
@@ -45,7 +45,7 @@ type APIEndpointReconciler struct {
 }
 
 // NewEndpointReconciler creates new endpoint reconciler
-func NewEndpointReconciler(c *k0sv1beta1.ClusterConfig, leaderElector LeaderElector, kubeClientFactory k8sutil.ClientFactory) *APIEndpointReconciler {
+func NewEndpointReconciler(c *v1beta1.ClusterConfig, leaderElector LeaderElector, kubeClientFactory k8sutil.ClientFactory) *APIEndpointReconciler {
 	d := atomic.Value{}
 	d.Store(true)
 	return &APIEndpointReconciler{
@@ -69,7 +69,6 @@ func (a *APIEndpointReconciler) Init() error {
 
 // Run runs the main loop for reconciling the externalAddress
 func (a *APIEndpointReconciler) Run() error {
-
 	go func() {
 		ticker := time.NewTicker(10 * time.Second)
 		defer ticker.Stop()
@@ -100,7 +99,6 @@ func (a *APIEndpointReconciler) Stop() error {
 func (a *APIEndpointReconciler) Healthy() error { return nil }
 
 func (a *APIEndpointReconciler) reconcileEndpoints() error {
-
 	if !a.leaderElector.IsLeader() {
 		a.L.Debug("we're not the leader, not reconciling api endpoints")
 		return nil
@@ -156,7 +154,6 @@ func (a *APIEndpointReconciler) reconcileEndpoints() error {
 	}
 
 	return nil
-
 }
 
 func (a *APIEndpointReconciler) createEndpoint(addresses []string) error {

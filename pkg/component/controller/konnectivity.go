@@ -24,11 +24,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/k0sproject/k0s/pkg/apis/k0s.k0sproject.io/v1beta1"
+
 	"github.com/sirupsen/logrus"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/k0sproject/k0s/internal/util"
-	config "github.com/k0sproject/k0s/pkg/apis/v1beta1"
 	"github.com/k0sproject/k0s/pkg/assets"
 	"github.com/k0sproject/k0s/pkg/constant"
 	"github.com/k0sproject/k0s/pkg/kubernetes"
@@ -38,7 +39,7 @@ import (
 
 // Konnectivity implements the component interface of konnectivity server
 type Konnectivity struct {
-	ClusterConfig *config.ClusterConfig
+	ClusterConfig *v1beta1.ClusterConfig
 	K0sVars       constant.CfgVars
 	LogLevel      string
 	supervisor    *supervisor.Supervisor
@@ -81,7 +82,6 @@ func (k *Konnectivity) Init() error {
 
 // Run ..
 func (k *Konnectivity) Run() error {
-
 	// Buffered chan to send updates for the count of servers
 	k.serverCountChan = make(chan int, 1)
 
@@ -207,7 +207,6 @@ func (k *Konnectivity) writeKonnectivityAgent() error {
 }
 
 func (k *Konnectivity) runLeaseCounter() {
-
 	logrus.Infof("starting to count controller lease holders every 10 secs")
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
