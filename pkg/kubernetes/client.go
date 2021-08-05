@@ -33,6 +33,7 @@ type ClientFactory interface {
 	GetClient() (kubernetes.Interface, error)
 	GetDynamicClient() (dynamic.Interface, error)
 	GetDiscoveryClient() (discovery.CachedDiscoveryInterface, error)
+	GetRestConfig() (*rest.Config, error)
 }
 
 // NewAdminClientFactory creates a new factory that loads the admin kubeconfig based client
@@ -85,7 +86,6 @@ func (c *clientFactory) GetClient() (kubernetes.Interface, error) {
 	c.client = client
 
 	return c.client, nil
-
 }
 
 func (c *clientFactory) GetDynamicClient() (dynamic.Interface, error) {
@@ -158,4 +158,16 @@ func NewClient(kubeconfig string) (kubernetes.Interface, error) {
 	}
 
 	return clientset, nil
+}
+
+func (c *clientFactory) GetRestConfig() (*rest.Config, error) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+	var err error
+
+	_, err = c.GetClient()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create a kubernetes client: %v", err)
+	}
+	return c.restConfig, nil
 }

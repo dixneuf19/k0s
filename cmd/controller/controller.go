@@ -471,6 +471,8 @@ func (c *CmdOpts) createClusterReconcilers(cf kubernetes.ClientFactory, leaderEl
 	}
 	reconcilers["systemRBAC"] = systemRBAC
 
+	cfgReconciler := controller.NewClusterConfigReconciler(c.ClusterConfig, leaderElector, cf)
+	reconcilers["clusterConfig-reconciler"] = cfgReconciler
 	return reconcilers, nil
 }
 

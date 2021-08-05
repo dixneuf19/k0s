@@ -85,6 +85,9 @@ const (
 	KubeRouterCNIImageVersion          = "v1.2.1"
 	KubeRouterCNIInstallerImage        = "quay.io/k0sproject/cni-node"
 	KubeRouterCNIInstallerImageVersion = "0.1.0"
+
+	// The namespace where we expect to find the ClusterConfig CRs
+	ClusterConfigNamespace = "kube-system"
 )
 
 // CfgVars is a struct that holds all the config variables required for K0s
