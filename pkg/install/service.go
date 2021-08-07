@@ -18,6 +18,8 @@ package install
 import (
 	"fmt"
 	"os"
+	"runtime"
+	"strings"
 
 	"github.com/kardianos/service"
 	"github.com/sirupsen/logrus"
@@ -68,11 +70,15 @@ func InstalledService() (service.Service, error) {
 func EnsureService(args []string) error {
 	var deps []string
 	var svcConfig *service.Config
+	var isController bool
 
 	prg := &Program{}
 	for _, v := range args {
 		if v == "controller" || v == "worker" {
 			svcConfig = GetServiceConfig(v)
+			if v == "controller" {
+				isController = true
+			}
 			break
 		}
 	}
@@ -92,6 +98,9 @@ func EnsureService(args []string) error {
 		svcConfig.Option = map[string]interface{}{
 			"SystemdScript": systemdScript,
 			"LimitNOFILE":   999999,
+		}
+		if strings.Contains(runtime.GOARCH, "arm") && isController {
+			svcConfig.Option["Environment"] = fmt.Sprintf("ETCD_UNSUPPORTED_ARCH=%s", runtime.GOARCH)
 		}
 	default:
 	}
@@ -193,6 +202,8 @@ KillMode=process
 LimitCORE=infinity
 TasksMax=infinity
 TimeoutStartSec=0
+
+{{- if .Environment}}Environment={{.Environment}}{{- end}}
 
 {{- if .ChRoot}}RootDirectory={{.ChRoot|cmd}}{{- end}}
 
